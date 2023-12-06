@@ -1,10 +1,10 @@
 create table if not exists Genres(
 	genres_id SERIAL not null primary key,
-	title VARCHAR(150) not null
+	title VARCHAR(150) not null UNIQUE
 );
 create table if not exists Performers(
 	perfomers_id SERIAL not null primary key,
-	nickname VARCHAR(150) not null
+	nickname VARCHAR(150) not null UNIQUE
 );
 create table if not exists GenresPerformers(
 	id SERIAL not null primary key,
@@ -14,9 +14,9 @@ create table if not exists GenresPerformers(
 );
 create table if not exists Albums(
 	albums_id SERIAL not null primary key,
-	traks_id integer not null references Tracks(tracks_id),
 	albums_name VARCHAR(150) not null,
-	year_of_release DATE not null
+	year_of_release DATE not null,
+	albums_year numeric CONSTRAINT year_of_release CHECK (albums_year > 1978)
 );
 create table if not exists PerformersAlbums(
 	id SERIAL not null primary key,
@@ -26,13 +26,16 @@ create table if not exists PerformersAlbums(
 );
 create table if not exists Tracks(
 	tracks_id SERIAL not null primary key,
+	albums_id integer not null references Albums(albums_id),
 	track_name VARCHAR(150) not null,
-	duration interval not null
+	duration interval not null,
+	track_int numeric CONSTRAINT duration CHECK (track_int > 0)
 );
 create table if not exists Collections(
 	collections_id SERIAL not null primary key,
-	collection_name VARCHAR(150) not null,
-	year_of_release DATE not null
+	collection_name VARCHAR(150) not null UNIQUE,
+	year_of_release DATE not null,
+	collection_year numeric CONSTRAINT year_of_release CHECK (collection_year > 1978)
 );
 create table if not exists CollectionsTrack(
 	id SERIAL not null primary key,
